@@ -12,7 +12,7 @@ class EigenValueVectorizeFeatureExtractor(FeatureExtractor):
 
     @classmethod
     def provides(cls):
-        return ['eigenv_1', 'eigenv_2', 'eigenv_3', 'normal_vector_1', 'normal_vector_2', 'normal_vector_3', 'slope']
+        return ['eigenv_1', 'eigenv_2', 'eigenv_3', 'normal_vector_1', 'normal_vector_2', 'normal_vector_3', 'slope', 'aspect']
 
     def extract(self, sourcepc, neighborhoods, targetpc, targetindex, volume):
         if not (isinstance(neighborhoods[0], list) or isinstance(neighborhoods[0], range)):
@@ -25,8 +25,10 @@ class EigenValueVectorizeFeatureExtractor(FeatureExtractor):
         normals = self._get_normals(eigvects)
         alpha = np.arccos(np.dot(normals, np.array([0., 0., 1.])))
         slope = np.tan(alpha)
+        # Calculate aspect (right now with respect to X, might want to change to WRT Y
+        aspect = np.arccos(np.dot(normals, np.array([1., 0., 0.])))
 
-        return e_vals[:, 0], e_vals[:, 1], e_vals[:, 2], normals[:, 0], normals[:, 1], normals[:, 2], slope
+        return e_vals[:, 0], e_vals[:, 1], e_vals[:, 2], normals[:, 0], normals[:, 1], normals[:, 2], slope, aspect
 
     @staticmethod
     def _get_cov(xyz):
