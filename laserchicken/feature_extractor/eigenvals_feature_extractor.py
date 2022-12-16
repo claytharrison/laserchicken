@@ -25,8 +25,9 @@ class EigenValueVectorizeFeatureExtractor(FeatureExtractor):
         normals = self._get_normals(eigvects)
         alpha = np.arccos(np.dot(normals, np.array([0., 0., 1.])))
         slope = np.tan(alpha)
-        # Calculate aspect (right now with respect to X, might want to change to WRT Y
-        aspect = np.arccos(np.dot(normals, np.array([1., 0., 0.])))
+        # Calculate aspect (in degrees, with respect to y. Change negative angles to positive.)
+        aspect = np.degrees(np.arccos(np.dot(normals, np.array([0., 1., 0.]))))
+        aspect[aspect < 0] += 360
 
         return e_vals[:, 0], e_vals[:, 1], e_vals[:, 2], normals[:, 0], normals[:, 1], normals[:, 2], slope, aspect
 
