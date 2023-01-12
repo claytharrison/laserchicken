@@ -5,8 +5,10 @@ from .density_feature_extractor import PointDensityFeatureExtractor
 from .echo_ratio_feature_extractor import EchoRatioFeatureExtractor
 from .eigenvals_feature_extractor import EigenValueVectorizeFeatureExtractor
 from .entropy_feature_extractor import EntropyFeatureExtractor
+from .filtered_band_ratio_feature_extractor import FilteredBandRatioFeatureExtractor
 from .kurtosis_feature_extractor import KurtosisFeatureExtractor
 from .mean_std_coeff_feature_extractor import MeanStdCoeffFeatureExtractor
+from .mean_std_coeff_feature_extractor_amplitude import MeanStdCoeffFeatureExtractorAmplitude
 from .median_feature_extractor import MedianFeatureExtractor
 from .percentile_feature_extractor import PercentileFeatureExtractor
 from .pulse_penetration_feature_extractor import PulsePenetrationFeatureExtractor
@@ -47,6 +49,7 @@ def _get_default_extractors():
             MeanStdCoeffFeatureExtractor(),
             MeanStdCoeffFeatureExtractor(data_key=keys.normalized_height),
             MeanStdCoeffFeatureExtractor(data_key=keys.intensity),
+            #MeanStdCoeffFeatureExtractor(data_key=keys.amplitude),
             SkewFeatureExtractor(),
             SkewFeatureExtractor(data_key=keys.normalized_height),
             KurtosisFeatureExtractor(),
@@ -59,6 +62,8 @@ def _get_default_extractors():
             BandRatioFeatureExtractor(None, 1, data_key=keys.normalized_height),
             BandRatioFeatureExtractor(1, 2, data_key=keys.normalized_height),
             BandRatioFeatureExtractor(2, 3, data_key=keys.normalized_height),
-            BandRatioFeatureExtractor(3, None, data_key=keys.normalized_height)] \
+            BandRatioFeatureExtractor(3, None, data_key=keys.normalized_height),
+            FilteredBandRatioFeatureExtractor(0, 50, data_key=keys.normalized_height, attribute_key = 'classification', attribute_values = [3,4,5]),
+            ] \
            + [PercentileFeatureExtractor(percentile=p) for p in range(1, 101)] \
            + [PercentileFeatureExtractor(percentile=p, data_key=keys.normalized_height) for p in range(1, 101)]

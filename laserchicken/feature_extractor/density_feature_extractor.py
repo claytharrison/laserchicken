@@ -10,10 +10,8 @@ class PointDensityFeatureExtractor(FeatureExtractor):
     def requires(cls):
         """
         Get a list of names of the point attributes that are needed for this feature extraction.
-
         For simple features, this could be just x, y, and z. Other features can build on again
         other features to have been computed first.
-
         :return: List of feature names
         """
         return []
@@ -22,11 +20,9 @@ class PointDensityFeatureExtractor(FeatureExtractor):
     def provides(cls):
         """
         Get a list of names of the feature values.
-
         This will return as many names as the number feature values that will be returned.
         For instance, if a feature extractor returns the first 3 Eigen values, this method
         should return 3 names, for instance 'eigen_value_1', 'eigen_value_2' and 'eigen_value_3'.
-
         :return: List of feature names
         """
         return ['point_density']
@@ -34,7 +30,6 @@ class PointDensityFeatureExtractor(FeatureExtractor):
     def extract(self, point_cloud, neighborhoods, target_point_cloud, target_indices, volume_description):
         """
         Extract the feature value(s) of the point cloud at location of the target.
-
         :param point_cloud: environment (search space) point cloud
         :param neighborhoods: list of arrays of indices of points within the point_cloud argument
         :param target_point_cloud: point cloud that contains target point
@@ -47,7 +42,6 @@ class PointDensityFeatureExtractor(FeatureExtractor):
     def _extract_one(self, source_pc, neighborhood, volume_description):
         """
         Extract the feature value(s) of the point cloud at location of the target.
-
         :param source_pc: environment (search space) point cloud
         :param neighborhood: array of indices of points within the point_cloud argument
         :param volume_description: volume object that describes the shape and size of the search volume
@@ -60,7 +54,6 @@ class PointDensityFeatureExtractor(FeatureExtractor):
     def get_params(self):
         """
         Return a tuple of parameters involved in the current feature extractorobject.
-
         Needed for provenance.
         """
         return ()

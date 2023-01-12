@@ -7,14 +7,7 @@ from laserchicken.io.base_io_handler import IOHandler
 from laserchicken.io.utils import convert_to_short_type, select_valid_attributes
 
 
-DEFAULT_LAS_ATTRIBUTES = {
-    'x',
-    'y',
-    'z',
-    'intensity',
-    'gps_time',
-    'raw_classification',
-}
+DEFAULT_LAS_ATTRIBUTES = 'all'
 
 
 class LASHandler(IOHandler):
