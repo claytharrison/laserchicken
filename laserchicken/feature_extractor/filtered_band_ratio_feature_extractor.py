@@ -11,6 +11,8 @@ from laserchicken.feature_extractor.base_feature_extractor import FeatureExtract
 from laserchicken.utils import get_attributes_per_neighborhood
 from laserchicken.keys import point_classes
 
+#used to set value returned for ratios when there are no points in the neighborhood
+DIVIDE_BY_ZERO_VALUE = np.nan
 
 def _to_unmasked_array(masked_array):
     """Creates a 'normal' numpy array from a masked array, inputting nans for masked values."""
@@ -126,7 +128,16 @@ class FilteredBandRatioFeatureExtractor(FeatureExtractor):
         
         n_points_within_band = np.sum(is_point_below_upper_limit * is_point_above_lower_limit, axis=1)
         n_points_within_band_within_classes = np.sum(is_point_below_upper_limit * is_point_above_lower_limit * is_point_in_classes, axis=1)
-        return _to_unmasked_array(n_points_within_band.astype(np.float64)), _to_unmasked_array(n_points_within_band_within_classes.astype(np.float64)), _to_unmasked_array(n_points_within_band / n_points_per_neighborhood), _to_unmasked_array(n_points_within_band_within_classes / n_points_per_neighborhood)
+
+        #convert to float64 to avoid errors when dividing by zero, etc
+        n_points_within_band = n_points_within_band.astype(np.float64)
+        n_points_within_band_within_classes = n_points_within_band_within_classes.astype(np.float64)
+        n_points_per_neighborhood = n_points_per_neighborhood.astype(np.float64)
+
+        band_to_neighborhood_ratio = np.divide(n_points_within_band, n_points_per_neighborhood, out = np.full_like(n_points_within_band, DIVIDE_BY_ZERO_VALUE), where = n_points_per_neighborhood!=0)
+        band_within_classes_to_neighborhood_ratio = np.divide(n_points_within_band_within_classes, n_points_per_neighborhood, out = np.full_like(n_points_within_band_within_classes, DIVIDE_BY_ZERO_VALUE), where = n_points_per_neighborhood!=0)
+
+        return _to_unmasked_array(n_points_within_band), _to_unmasked_array(n_points_within_band_within_classes), _to_unmasked_array(band_to_neighborhood_ratio),_to_unmasked_array(band_within_classes_to_neighborhood_ratio)
 
     def get_params(self):
         """
