@@ -94,6 +94,7 @@ class FilteredBandRatioFeatureExtractor(FeatureExtractor):
                     ratio_band_class += '_' + pt_class
             
         
+        return_names = [n_points_band, n_points_band_class, ratio_band, ratio_band_class]
         return return_names
 
     def extract(self, point_cloud, neighborhoods, target_point_cloud, target_index, volume_description):
