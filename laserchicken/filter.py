@@ -42,18 +42,18 @@ def select_equal(point_cloud, attribute, value, return_mask=False):
 
 def select_main_flight(point_cloud, return_mask=False):
     """
-    Return the selection of the input point cloud that contains only points from the majority point source ID.
+    Return the selection of the input point cloud that contains only points with the same
+    scan angle polarity as the minimum scan angle.
     """
-    _check_valid_arguments('point_source_id', point_cloud)
-    point_source_ids = point_cloud[point]['point_source_id']['data']
-    unique, counts = np.unique(point_source_ids, return_counts=True)
-    majority_point_source_id = unique[np.argmax(counts)]
-    mask = point_source_ids == majority_point_source_id
+    _check_valid_arguments('scan_angle', point_cloud)
+    scan_angles = point_cloud[point]['scan_angle']['data']
+    minimum = scan_angles[np.abs(scan_angles).argmin()]
+    mask = (scan_angles * minimum > 0)
     if return_mask:
         return mask
     point_cloud_filtered = copy_point_cloud(point_cloud, mask)
     add_metadata(point_cloud_filtered, sys.modules[__name__],
-                 {'attribute': 'point_source_id', 'value': majority_point_source_id})
+                 {'overlap_removed': True})
     return point_cloud_filtered
 
 def select_above(point_cloud, attribute, threshold, return_mask=False):
