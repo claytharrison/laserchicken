@@ -48,7 +48,7 @@ def select_main_flight(point_cloud, return_mask=False):
     _check_valid_arguments('scan_angle', point_cloud)
     scan_angles = point_cloud[point]['scan_angle']['data']
     minimum = scan_angles[np.abs(scan_angles).argmin()]
-    mask = (scan_angles * minimum > 0)
+    mask = ((np.sign(scan_angles) * minimum) > 0)
     if return_mask:
         return mask
     point_cloud_filtered = copy_point_cloud(point_cloud, mask)
